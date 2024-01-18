@@ -1,27 +1,28 @@
+import openai
+from typing import Optional, Tuple
+
+
 class OpenAIApiClient:
-    """
-    A client for interacting with the OpenAI API.
-    """
+    def __init__(self, api_key: str) -> None:
+        self.api_key: str = api_key
+        self.client = openai.OpenAI(api_key=api_key)
 
-    def __init__(self, api_key):
-        """
-        Initializes the API client with the provided API key.
-        """
-        self.api_key = api_key
+    def send_chat_message(self, messages: list) -> Optional[openai.ChatCompletion]:
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4-1106-preview",
+                messages=messages
+            )
+            return response
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
 
-    def send_chat_message(self, message, context):
-        """
-        Sends a chat message to the OpenAI API and returns the response.
-        :param message: The message from the user.
-        :param context: The current context of the conversation.
-        :return: The response from the API.
-        """
-        pass
-
-    def extract_response(self, api_response):
-        """
-        Extracts the assistant's response from the API response.
-        :param api_response: The response from the OpenAI API.
-        :return: The assistant's response.
-        """
-        pass
+    def extract_response(self, api_response: openai.ChatCompletion) -> Tuple[Optional[str], int, int, int]:
+        if api_response:
+            assistant_message = api_response.choices[0].message.content
+            prompt_tokens = api_response.usage.prompt_tokens
+            response_tokens = api_response.usage.completion_tokens
+            total_tokens = api_response.usage.total_tokens
+            return assistant_message, prompt_tokens, response_tokens, total_tokens
+        return None, 0, 0, 0

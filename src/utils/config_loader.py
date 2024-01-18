@@ -3,20 +3,9 @@ from dotenv import load_dotenv
 
 
 class ConfigLoader:
-    """
-    Loads configuration settings from an .env file.
-    """
-
-    def __init__(self):
-        """
-        Initializes the config loader and loads the settings.
-        """
+    def __init__(self) -> None:
         load_dotenv()
-        self.api_key = os.getenv('OPENAI_API_KEY')
+        self.api_key: str = os.getenv('OPENAI_API_KEY', '')
 
-    def get_api_key(self):
-        """
-        Retrieves the OpenAI API key.
-        :return: The OpenAI API key.
-        """
+    def get_api_key(self) -> str:
         return self.api_key
