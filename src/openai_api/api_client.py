@@ -1,21 +1,23 @@
 import openai
+import logging
 from typing import Optional, Tuple
 
 
 class OpenAIApiClient:
     def __init__(self, api_key: str) -> None:
         self.api_key: str = api_key
-        self.client = openai.OpenAI(api_key=api_key)
+        openai.api_key = self.api_key
+        logging.basicConfig(level=logging.INFO)
 
     def send_chat_message(self, messages: list) -> Optional[openai.ChatCompletion]:
         try:
-            response = self.client.chat.completions.create(
+            response = openai.chat.completions.create(
                 model="gpt-4-1106-preview",
                 messages=messages
             )
             return response
         except Exception as e:
-            print(f"An error occurred: {e}")
+            logging.error(f"OpenAI API error: {e}")
             return None
 
     def extract_response(self, api_response: openai.ChatCompletion) -> Tuple[Optional[str], int, int, int]:

@@ -1,20 +1,13 @@
+from utils.config_loader import ConfigLoader
+
+
 class TokenCounter:
-    """
-    Counts tokens to monitor and control usage.
-    """
+    def __init__(self) -> None:
+        self.total_tokens: int = 0
+        self.limit: int = int(ConfigLoader().get_token_limit())
 
-    def count_tokens(self, message):
-        """
-        Counts the number of tokens in a message.
-        :param message: The message to count tokens in.
-        :return: The number of tokens.
-        """
-        pass
+    def update_token_count(self, token_count: int) -> None:
+        self.total_tokens += token_count
 
-    def check_token_limit(self, total_tokens):
-        """
-        Checks if the total token count is approaching the limit.
-        :param total_tokens: The current total token count.
-        :return: Boolean indicating if the limit is being approached.
-        """
-        pass
+    def check_token_limit(self) -> bool:
+        return self.total_tokens >= self.limit

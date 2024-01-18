@@ -1,32 +1,31 @@
-class ChatManager:
-    """
-    Manages the flow of the chat application.
-    """
+from typing import Optional, Tuple
+from chat_interface.context_manager import ContextManager
+from chat_interface.state_manager import StateManager
+from chat_interface.token_counter import TokenCounter
+from openai_api.api_client import OpenAIApiClient
 
-    def __init__(self, api_client, context_manager, token_counter, intent_tracker, state_manager):
-        """
-        Initializes the ChatManager with required components.
-        """
+
+class ChatManager:
+    def __init__(self, api_client: OpenAIApiClient, context_manager: ContextManager, token_counter: TokenCounter, state_manager: StateManager) -> None:
         self.api_client = api_client
         self.context_manager = context_manager
         self.token_counter = token_counter
-        self.intent_tracker = intent_tracker
         self.state_manager = state_manager
 
-    def process_user_input(self, input_text):
-        """
-        Processes the user input, updates context, and generates a response.
-        :param input_text: The input text from the user.
-        :return: The response from the assistant.
-        """
-        pass
+    def process_user_input(self, input_text: str) -> Optional[Tuple[str, int, int, int]]:
+        context = self.context_manager.get_context_api()
+        formatted_input = {"role": "user", "content": input_text}
+        response = self.api_client.send_chat_message(
+            context + [formatted_input])
 
-    def update_conversation(self, user_input, assistant_response):
-        """
-        Updates the conversation context and token count.
-        :param user_input: The user's input message.
-        :param assistant_response: The assistant's response message.
-        """
-        pass
+        if response:
+            assistant_response, prompt_tokens, response_tokens, total_tokens = self.api_client.extract_response(
+                response)
+            self.update_conversation(input_text, assistant_response)
+            self.token_counter.update_token_count(
+                prompt_tokens + response_tokens)
+            return assistant_response, prompt_tokens, response_tokens, total_tokens
+        return None
 
-    # Additional methods to integrate the other functionalities
+    def update_conversation(self, user_input: str, assistant_response: str) -> None:
+        self.context_manager.update_context(user_input, assistant_response)
