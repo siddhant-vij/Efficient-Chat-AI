@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict
 from docx import Document
-from utils.summarizer import summarize_conversation
+from src.utils.summarizer import summarize_conversation
 
 
 class ContextManager:

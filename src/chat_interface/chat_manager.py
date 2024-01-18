@@ -1,8 +1,8 @@
 from typing import Optional, Tuple
-from chat_interface.context_manager import ContextManager
-from chat_interface.state_manager import StateManager
-from chat_interface.token_counter import TokenCounter
-from openai_api.api_client import OpenAIApiClient
+from src.chat_interface.context_manager import ContextManager
+from src.chat_interface.state_manager import StateManager
+from src.chat_interface.token_counter import TokenCounter
+from src.openai_api.api_client import OpenAIApiClient
 
 
 class ChatManager:

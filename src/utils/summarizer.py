@@ -3,7 +3,7 @@ from sumy.parsers.plaintext import PlaintextParser
 from sumy.summarizers.luhn import LuhnSummarizer
 import logging
 
-from utils.config_loader import ConfigLoader
+from src.utils.config_loader import ConfigLoader
 
 
 def summarize_conversation(conversation_history: str, summary_ratio: float = None) -> str:
