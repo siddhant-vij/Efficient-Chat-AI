@@ -22,7 +22,6 @@ A terminal-based chat application that leverages OpenAI's GPT-4 model to facilit
 - Navigate to the project directory: `cd Efficient-Chat-AI`
 - Create the conda environment: `conda create --name chat-ai python=3.10.13`
 - Activate the environment: `conda activate chat-ai`
-- Install dependencies: `pip install -r requirements.txt`
 - Create a `.env` file in the project root directory based on the `.env.example` template.
 - Install the package: `pip install .`
 - Run the application: `chat-ai`
